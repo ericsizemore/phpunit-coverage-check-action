@@ -12,7 +12,7 @@ fi
 
 THRESHOLD="100"
 if [ ! -n "$INPUT_THRESHOLD" ]; then
-    if [ "$INPUT_THRESHOLD" < "1" ] || [ "$INPUT_THRESHOLD" > "100" ]; then
+    if [ "$INPUT_THRESHOLD" -le "1" ] || [ "$INPUT_THRESHOLD" -ge "100" ]; then
         THRESHOLD="100"
     else
         THRESHOLD="$INPUT_THRESHOLD"
@@ -33,7 +33,7 @@ if [ ! -n "$INPUT_ONLY_PERCENTAGE" ]; then
     fi
 fi
 
-if [ "$SHOW_FILES = "--show-files" ] && [ "$ONLY_PERCENTAGE" = "--only-percentage" ]; then
+if [ "$SHOW_FILES" = "--show-files" ] && [ "$ONLY_PERCENTAGE" = "--only-percentage" ]; then
     ONLY_PERCENTAGE=""
 fi
 
