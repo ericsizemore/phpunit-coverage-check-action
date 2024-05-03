@@ -12,7 +12,7 @@ fi
 
 THRESHOLD="100"
 if [ ! -z "$INPUT_THRESHOLD" ]; then
-    if [ "$INPUT_THRESHOLD" < "1" ] || [ "$INPUT_THRESHOLD" > 100 ]; then
+    if [ "$INPUT_THRESHOLD" < "1" ] || [ "$INPUT_THRESHOLD" > "100" ]; then
         THRESHOLD="100"
     else
         THRESHOLD="$INPUT_THRESHOLD"
