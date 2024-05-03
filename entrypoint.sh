@@ -11,7 +11,7 @@ if [ ! -z "$INPUT_CLOVER_FILE" ]; then
 fi
 
 THRESHOLD="100"
-if [ ! -z "$INPUT_THRESHOLD" ]; then
+if [ ! -n "$INPUT_THRESHOLD" ]; then
     if [ "$INPUT_THRESHOLD" < "1" ] || [ "$INPUT_THRESHOLD" > "100" ]; then
         THRESHOLD="100"
     else
@@ -21,13 +21,13 @@ fi
 
 SHOW_FILES=""
 ONLY_PERCENTAGE=""
-if [ ! -z "$INPUT_SHOW_FILES" ]; then
+if [ ! -n "$INPUT_SHOW_FILES" ]; then
     if [ "$INPUT_SHOW_FILES" = "true" ]; then
         SHOW_FILES="--show-files"
     fi
 fi
 
-if [ ! -z "$INPUT_ONLY_PERCENTAGE" ]; then
+if [ ! -n "$INPUT_ONLY_PERCENTAGE" ]; then
     if [ "$INPUT_ONLY_PERCENTAGE" = "true" ]; then
         ONLY_PERCENTAGE="--only-percentage"
     fi
