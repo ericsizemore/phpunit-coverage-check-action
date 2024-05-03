@@ -1,4 +1,4 @@
-FROM php:8.2-alpine
+FROM php:8.3-alpine
 
 LABEL "com.github.actions.name"="PHPUnit Coverage Check"
 LABEL "com.github.actions.description"="Check the code coverage using the clover report of PHPUnit."
