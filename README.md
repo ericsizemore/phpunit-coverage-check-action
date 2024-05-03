@@ -8,6 +8,9 @@ This action makes use of code from [psalm/psalm-github-actions](https://github.c
 Much of the code being used from them are for the `Dockerfile`, `action.yml`, `entrypoint.sh`, and `.github/workflows/watch.yml` files.
 
 ## Basic Usage
+
+You can use the Docker image directly:
+
 ```yaml
 name: PHPUnit Coverage Check
 
@@ -31,14 +34,32 @@ jobs:
 
 ```
 
-## Specify PHPUnit Coverage Check version
-
-You can also specify a version.
+Or, the GitHub marketplace action:
 
 ```diff
        - name: Coverage Check
 -        uses: docker://ghcr.io/ericsizemore/phpunit-coverage-check-action
-+        uses: docker://ghcr.io/ericsizemore/phpunit-coverage-check-action:2.0.0
++        uses: ericsizemore/phpunit-coverage-check-action@1.0.0
+```
+
+## Using a different version
+
+You can also specify a version.
+
+Direct Docker image:
+
+```diff
+       - name: Coverage Check
+-        uses: docker://ghcr.io/ericsizemore/phpunit-coverage-check-action
++        uses: docker://ghcr.io/ericsizemore/phpunit-coverage-check-action:1.0.0
+```
+
+Or, the GitHub marketplace action:
+
+```diff
+       - name: Coverage Check
+-        uses: ericsizemore/phpunit-coverage-check-action@1.0.0
++        uses: ericsizemore/phpunit-coverage-check-action@master
 ```
 
 ## Detailed Usage
