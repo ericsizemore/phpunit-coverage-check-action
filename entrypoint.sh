@@ -11,7 +11,7 @@ if [ ! -z "$INPUT_CLOVER_FILE" ]; then
 fi
 
 THRESHOLD="100"
-if [ ! -n "$INPUT_THRESHOLD" ]; then
+if [ -n "$INPUT_THRESHOLD" ]; then
     if [ "$INPUT_THRESHOLD" -le "1" ] || [ "$INPUT_THRESHOLD" -ge "100" ]; then
         THRESHOLD="100"
     else
@@ -21,13 +21,13 @@ fi
 
 SHOW_FILES=""
 ONLY_PERCENTAGE=""
-if [ ! -n "$INPUT_SHOW_FILES" ]; then
+if [ -n "$INPUT_SHOW_FILES" ]; then
     if [ "$INPUT_SHOW_FILES" = "true" ]; then
         SHOW_FILES="--show-files"
     fi
 fi
 
-if [ ! -n "$INPUT_ONLY_PERCENTAGE" ]; then
+if [ -n "$INPUT_ONLY_PERCENTAGE" ]; then
     if [ "$INPUT_ONLY_PERCENTAGE" = "true" ]; then
         ONLY_PERCENTAGE="--only-percentage"
     fi
@@ -104,4 +104,5 @@ else
 fi
 
 /composer/vendor/bin/coverage-check --version
+echo "options: $CLOVER_FILE $THRESHOLD $ONLY_PERCENTAGE $SHOW_FILES"
 /composer/vendor/bin/coverage-check $CLOVER_FILE $THRESHOLD $ONLY_PERCENTAGE $SHOW_FILES $*
