@@ -7,6 +7,10 @@ Run [PHPUnit Coverage Check](https://github.com/ericsizemore/phpunit-coverage-ch
 This action makes use of code from [psalm/psalm-github-actions](https://github.com/psalm/psalm-github-actions). Without them, I admittedly would have been lost.
 Much of the code being used from them are for the `Dockerfile`, `action.yml`, `entrypoint.sh`, and `.github/workflows/watch.yml` files.
 
+## Version Information
+
+Each [release](https://github.com/ericsizemore/phpunit-coverage-check-action/releases) will indicate which version of PHPUnit Coverage Check is being used.
+
 ## Basic Usage
 
 You can use the Docker image directly:
@@ -44,22 +48,12 @@ Or, the GitHub marketplace action:
 
 ## Using a different version
 
-You can also specify a version.
-
-Direct Docker image:
+You can also specify a specific PHPUnit Coverage Check version. Currently supports PHPUnit Coverage Check 2.0.0 and greater.
 
 ```diff
        - name: Coverage Check
 -        uses: docker://ghcr.io/ericsizemore/phpunit-coverage-check-action
-+        uses: docker://ghcr.io/ericsizemore/phpunit-coverage-check-action:1.0.0
-```
-
-Or, the GitHub marketplace action:
-
-```diff
-       - name: Coverage Check
--        uses: ericsizemore/phpunit-coverage-check-action@1.0.0
-+        uses: ericsizemore/phpunit-coverage-check-action@master
++        uses: docker://ghcr.io/ericsizemore/phpunit-coverage-check-action:2.0.0
 ```
 
 ## Detailed Usage

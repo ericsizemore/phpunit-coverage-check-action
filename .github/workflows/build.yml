@@ -1,0 +1,46 @@
+name: Build Docker image with latest main library release
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '31 12 * * *'
+
+jobs:
+  docker:
+    name: Push tagged docker image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Update Dockerfile with latest version
+        id: fetch_version
+        run: |
+          last=$(curl -s https://packagist.org/packages/esi/phpunit-coverage-check.json|jq '[.package.versions[]|select(.version|test("^\\d+\\.\\d+\\.\\d+$"))|.version]|max_by(.|[splits("[.]")]|map(tonumber))')
+          last=$(echo $last | tr -d '"')
+          echo "Last PHPUnit Coverage Check version is $last"
+          echo "last=$last" >> $GITHUB_OUTPUT
+
+          sed -i -re "s/require esi\/phpunit-coverage-check/require esi\/phpunit-coverage-check:$last/" Dockerfile
+          cat Dockerfile
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build images
+        run: docker build -t ghcr.io/ericsizemore/phpunit-coverage-check-action:${{ steps.fetch_version.outputs.last }} -t ghcr.io/ericsizemore/phpunit-coverage-check-action:latest .
+
+      - name: Publish
+        run: |
+          docker push ghcr.io/ericsizemore/phpunit-coverage-check-action:${{ steps.fetch_version.outputs.last }}
+          docker push ghcr.io/ericsizemore/phpunit-coverage-check-action:latest
