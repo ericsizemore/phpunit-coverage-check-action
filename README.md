@@ -123,7 +123,7 @@ Specify `composer_require_dev: true` to install dev dependencies and `composer_i
 These are both set to false by default.
 
 ```diff
-       - name: Psalm
+       - name: Coverage Check
          uses: docker://ghcr.io/ericsizemore/phpunit-coverage-check-action
 +        with:
 +          composer_require_dev: true
