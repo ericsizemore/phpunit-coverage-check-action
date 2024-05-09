@@ -146,9 +146,9 @@ Use the following config:
 
 Auth for private composer repositories
 -------------------------------
-If you have private composer dependencies, SSH authentication must be used. Generate an SSH key pair for this purpose and add it to your private repository's configuration, preferably with only `read-only` privileges. On Github, for instance, this can be done by using [deploy keys][https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys].
+If you have private composer dependencies, SSH authentication must be used. Generate an SSH key pair for this purpose and add it to your private repository's configuration, preferably with only `read-only` privileges. On Github, for instance, this can be done by using [deploy keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys).
 
-Add the key pair to your project using [Github Secrets][https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions], and pass them into this action by using the `ssh_key` and `ssh_key_pub` inputs. If your private repository is stored on a server other than `github.com`, you also need to pass the domain via `ssh_domain`.
+Add the key pair to your project using [Github Secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions), and pass them into this action by using the `ssh_key` and `ssh_key_pub` inputs. If your private repository is stored on a server other than `github.com`, you also need to pass the domain via `ssh_domain`.
 
 Example:
 
