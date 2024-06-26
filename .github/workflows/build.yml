@@ -58,7 +58,7 @@ jobs:
         with:
           subject-name: ghcr.io/ericsizemore/phpunit-coverage-check-action
           subject-digest: ${{ steps.get-digest.outputs.digest }}
-          push-to-registry: true
+          push-to-registry: false
 
   workflow-keepalive:
     if: github.event_name == 'schedule'
