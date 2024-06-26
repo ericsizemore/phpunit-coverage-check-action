@@ -1,4 +1,4 @@
-name: Build Docker image with latest main library release
+name: "Build Docker image with latest main library release"
 
 on:
   workflow_dispatch:
@@ -7,19 +7,20 @@ on:
 
 jobs:
   docker:
-    name: Push tagged docker image
+    name: "Push tagged docker image"
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      id-token: write
       packages: write
-
+      contents: read
+      attestations: write
     steps:
-      - name: Checkout code
+      - name: "Checkout code"
         uses: actions/checkout@v4
         with:
           ref: master
 
-      - name: Update Dockerfile with latest version
+      - name: "Update Dockerfile with latest version"
         id: fetch_version
         run: |
           last=$(curl -s https://packagist.org/packages/esi/phpunit-coverage-check.json|jq '[.package.versions[]|select(.version|test("^\\d+\\.\\d+\\.\\d+$"))|.version]|max_by(.|[splits("[.]")]|map(tonumber))')
@@ -30,20 +31,34 @@ jobs:
           sed -i -re "s/require esi\/phpunit-coverage-check:2.0.0/require esi\/phpunit-coverage-check:$last/" Dockerfile
           cat Dockerfile
 
-      - name: Docker login
+      - name: "Docker login"
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build images
+      - name: "Build images"
         run: docker build -t ghcr.io/ericsizemore/phpunit-coverage-check-action:${{ steps.fetch_version.outputs.last }} -t ghcr.io/ericsizemore/phpunit-coverage-check-action:latest .
 
-      - name: Publish
+      - name: "Publish"
         run: |
           docker push ghcr.io/ericsizemore/phpunit-coverage-check-action:${{ steps.fetch_version.outputs.last }}
           docker push ghcr.io/ericsizemore/phpunit-coverage-check-action:latest
+
+      - name: "Get digest"
+        id: get-digest
+        run: |
+          digest=$(docker manifest inspect ghcr.io/ericsizemore/phpunit-coverage-check-action:latest -v | jq -r '.[0].Descriptor.digest')
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
+
+      - name: "Attest"
+        uses: actions/attest-build-provenance@v1
+        id: attest
+        with:
+          subject-name: ghcr.io/ericsizemore/phpunit-coverage-check-action
+          subject-digest: ${{ steps.get-digest.outputs.digest }}
+          push-to-registry: true
 
   workflow-keepalive:
     if: github.event_name == 'schedule'
