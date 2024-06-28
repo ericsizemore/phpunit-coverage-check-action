@@ -11,6 +11,10 @@ Much of the code being used from them are for the `Dockerfile`, `action.yml`, `e
 
 Each [release](https://github.com/ericsizemore/phpunit-coverage-check-action/releases) will indicate which version of PHPUnit Coverage Check is being used.
 
+## Attestations
+
+See [Attestations](https://github.com/ericsizemore/phpunit-coverage-check-action/attestations).
+
 ## Basic Usage
 
 You can use the Docker image directly:
