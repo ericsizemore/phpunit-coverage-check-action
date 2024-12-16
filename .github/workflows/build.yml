@@ -23,12 +23,12 @@ jobs:
       - name: "Update Dockerfile with latest version"
         id: fetch_version
         run: |
-          last=$(curl -s https://packagist.org/packages/esi/phpunit-coverage-check.json|jq '[.package.versions[]|select(.version|test("^\\d+\\.\\d+\\.\\d+$"))|.version]|max_by(.|[splits("[.]")]|map(tonumber))')
+          last=$(curl -s https://repo.packagist.org/p2/esi/phpunit-coverage-check.json|jq '[.. | objects | .version] | max')
           last=$(echo $last | tr -d '"')
           echo "Last PHPUnit Coverage Check version is $last"
           echo "last=$last" >> $GITHUB_OUTPUT
 
-          sed -i -re "s/require esi\/phpunit-coverage-check:2.0.2/require esi\/phpunit-coverage-check:$last/" Dockerfile
+          sed -i -re "s/require esi\/phpunit-coverage-check:3.0.0/require esi\/phpunit-coverage-check:$last/" Dockerfile
           cat Dockerfile
 
       - name: "Docker login"
