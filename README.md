@@ -80,6 +80,9 @@ Whether only the percentage of coverage is returned. Accepts boolean values (tru
 
 Whether to process and display coverage for all files found within the clover report. Accepts boolean values (true or false)
 
+#### table_width
+The --table-width option will only have an affect if used with the --show-files option. The only requirement for this particular option is that you must pass an integer value >= 70.
+
 
 ### An example
 

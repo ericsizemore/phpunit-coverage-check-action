@@ -28,7 +28,7 @@ jobs:
           echo "Last PHPUnit Coverage Check version is $last"
           echo "last=$last" >> $GITHUB_OUTPUT
 
-          sed -i -re "s/require esi\/phpunit-coverage-check:3.0.0/require esi\/phpunit-coverage-check:$last/" Dockerfile
+          sed -i -re "s/require esi\/phpunit-coverage-check:3.1.0/require esi\/phpunit-coverage-check:$last/" Dockerfile
           cat Dockerfile
 
       - name: "Docker login"

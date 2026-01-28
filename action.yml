@@ -27,6 +27,10 @@ inputs:
     required: false
     default: 'false'
     description: 'Whether to calculate and display coverage for all files found within the clover.xml'
+  table_width:
+    required: false
+    default: '70'
+    description: 'The output table column width when opting for --show-files'
   composer_require_dev:
     required: false
     default: 'false'

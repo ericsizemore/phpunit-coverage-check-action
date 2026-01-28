@@ -37,6 +37,17 @@ if [ "$SHOW_FILES" = "--show-files" ] && [ "$ONLY_PERCENTAGE" = "--only-percenta
     ONLY_PERCENTAGE=""
 fi
 
+TABLE_WIDTH="70"
+TABLE_WIDTH_CMD=""
+if [ -n "$INPUT_TABLE_WIDTH" ]; then
+    if [ "$INPUT_TABLE_WIDTH" -le "70" ]; then
+        TABLE_WIDTH="70"
+    else
+        TABLE_WIDTH="$INPUT_TABLE_WIDTH"
+    fi
+    TABLE_WIDTH_CMD="--table-width $TABLE_WIDTH"
+fi
+
 # Code borrowed from psalm/psalm-github-actions
 
 if [ -n "$INPUT_SSH_KEY" ]
@@ -104,5 +115,5 @@ else
 fi
 
 /composer/vendor/bin/coverage-check --version
-echo "options: $CLOVER_FILE $THRESHOLD $ONLY_PERCENTAGE $SHOW_FILES"
-/composer/vendor/bin/coverage-check $CLOVER_FILE $THRESHOLD $ONLY_PERCENTAGE $SHOW_FILES $*
+echo "options: $CLOVER_FILE $THRESHOLD $ONLY_PERCENTAGE $SHOW_FILES $TABLE_WIDTH_CMD"
+/composer/vendor/bin/coverage-check $CLOVER_FILE $THRESHOLD $ONLY_PERCENTAGE $SHOW_FILES $TABLE_WIDTH_CMD $*
