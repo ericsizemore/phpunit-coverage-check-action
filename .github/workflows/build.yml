@@ -49,7 +49,7 @@ jobs:
       - name: "Get digest"
         id: get-digest
         run: |
-          digest=$(docker manifest inspect ghcr.io/ericsizemore/phpunit-coverage-check-action:latest -v | jq -r '.Descriptor.digest')
+          digest=$(docker manifest inspect ghcr.io/ericsizemore/phpunit-coverage-check-action:latest -v | jq -r '.[0].Descriptor.digest')
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
       - name: "Attest"
