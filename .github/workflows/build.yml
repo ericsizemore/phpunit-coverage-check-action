@@ -64,17 +64,9 @@ jobs:
             -o spdx-json \
             > ${{ github.workspace }}/sbom.json
             
-      - name: "Attest provenance"
+      - name: "Attest provenance + SBOM"
         uses: actions/attest@v4
         id: attest
-        with:
-          subject-name: ghcr.io/ericsizemore/phpunit-coverage-check-action
-          subject-digest: ${{ steps.get-digest.outputs.digest }}
-          push-to-registry: false
-
-      - name: "Attest SBOM"
-        uses: actions/attest-sbom@v1
-        id: attest-sbom
         with:
           subject-name: ghcr.io/ericsizemore/phpunit-coverage-check-action
           subject-digest: ${{ steps.get-digest.outputs.digest }}
