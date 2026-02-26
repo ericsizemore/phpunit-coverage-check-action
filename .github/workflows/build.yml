@@ -56,11 +56,13 @@ jobs:
       - name: "Generate SBOM"
         id: generate-sbom
         run: |
-          # Generate SBOM from the container (composer dependencies)
-          docker run --rm \
-            -v ${{ github.workspace }}:/workspace \
-            ghcr.io/ericsizemore/phpunit-coverage-check-action:latest \
-            composer show --format=json > ${{ github.workspace }}/sbom.json
+          # Install syft if not already available
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          
+          # Generate SBOM from the Docker image (includes OS + application dependencies)
+          syft ghcr.io/ericsizemore/phpunit-coverage-check-action:latest \
+            -o json \
+            -o json=${{ github.workspace }}/sbom.json
             
       - name: "Attest provenance"
         uses: actions/attest@v4
