@@ -61,8 +61,8 @@ jobs:
           
           # Generate SBOM from the Docker image (includes OS + application dependencies)
           syft ghcr.io/ericsizemore/phpunit-coverage-check-action:latest \
-            -o json \
-            -o json=${{ github.workspace }}/sbom.json
+            -o spdx-json \
+            > ${{ github.workspace }}/sbom.json
             
       - name: "Attest provenance"
         uses: actions/attest@v4
