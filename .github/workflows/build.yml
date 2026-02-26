@@ -53,12 +53,30 @@ jobs:
           digest=$(docker manifest inspect ghcr.io/ericsizemore/phpunit-coverage-check-action:latest -v | jq -r '.Descriptor.digest')
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
-      - name: "Attest"
+      - name: "Generate SBOM"
+        id: generate-sbom
+        run: |
+          # Generate SBOM from the container (composer dependencies)
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            ghcr.io/ericsizemore/phpunit-coverage-check-action:latest \
+            composer show --format=json > ${{ github.workspace }}/sbom.json
+            
+      - name: "Attest provenance"
         uses: actions/attest@v4
         id: attest
         with:
           subject-name: ghcr.io/ericsizemore/phpunit-coverage-check-action
           subject-digest: ${{ steps.get-digest.outputs.digest }}
+          push-to-registry: false
+
+      - name: "Attest SBOM"
+        uses: actions/attest-sbom@v1
+        id: attest-sbom
+        with:
+          subject-name: ghcr.io/ericsizemore/phpunit-coverage-check-action
+          subject-digest: ${{ steps.get-digest.outputs.digest }}
+          sbom-path: sbom.json
           push-to-registry: false
 
   workflow-keepalive:
