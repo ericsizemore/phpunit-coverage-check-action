@@ -42,10 +42,22 @@ jobs:
           digest=$(docker manifest inspect ghcr.io/ericsizemore/phpunit-coverage-check-action:${{ github.ref_name }} -v | jq -r '.Descriptor.digest')
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
-      - name: "Attest"
-        uses: actions/attest-build-provenance@v3
+      - name: "Generate SBOM"
+        id: generate-sbom
+        run: |
+          # Install syft if not already available
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          
+          # Generate SBOM from the Docker image (includes OS + application dependencies)
+          syft ghcr.io/ericsizemore/phpunit-coverage-check-action:latest \
+            -o spdx-json \
+            > ${{ github.workspace }}/sbom.json
+            
+      - name: "Attest provenance + SBOM"
+        uses: actions/attest@v4
         id: attest
         with:
           subject-name: ghcr.io/ericsizemore/phpunit-coverage-check-action
           subject-digest: ${{ steps.get-digest.outputs.digest }}
+          sbom-path: sbom.json
           push-to-registry: false
