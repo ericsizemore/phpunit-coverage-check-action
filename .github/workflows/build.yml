@@ -71,7 +71,7 @@ jobs:
           push-to-registry: false
 
       - name: "Attest SBOM"
-        uses: actions/attest-sbom@v1
+        uses: actions/attest-sbom@v4
         id: attest-sbom
         with:
           subject-name: ghcr.io/ericsizemore/phpunit-coverage-check-action
