@@ -50,6 +50,16 @@ jobs:
       - name: "Get digest"
         id: get-digest
         run: |
+          docker manifest inspect "$image" --verbose > manifest.json
+
+          jq '{
+            top_level_type: type,
+            entries: (if type == "array"
+              then map({keys: keys, descriptor: .Descriptor})
+              else {keys: keys, descriptor: .Descriptor}
+            end)
+          }' manifest.json
+          
           digest=$(docker manifest inspect ghcr.io/ericsizemore/phpunit-coverage-check-action:latest -v | jq -r '.Descriptor.digest')
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
