@@ -50,17 +50,29 @@ jobs:
       - name: "Get digest"
         id: get-digest
         run: |
-          docker manifest inspect "$image" --verbose > manifest.json
+          image="ghcr.io/ericsizemore/phpunit-coverage-check-action:latest"
 
-          jq '{
-            top_level_type: type,
-            entries: (if type == "array"
-              then map({keys: keys, descriptor: .Descriptor})
-              else {keys: keys, descriptor: .Descriptor}
-            end)
-          }' manifest.json
-          
-          digest=$(docker manifest inspect ghcr.io/ericsizemore/phpunit-coverage-check-action:latest -v | jq -r '.Descriptor.digest')
+          manifest="$(docker manifest inspect "$image" -v || true)"
+
+          if [ -z "$manifest" ]; then
+            echo "No manifest returned for $image" >&2
+            exit 1
+          fi
+
+          digest="$(echo "$manifest" | jq -r '
+            if type == "array" then
+              .[0].Descriptor.digest // .[0].digest // empty
+            else
+              .Descriptor.digest // .digest // empty
+            end
+          ')"
+
+          if [ -z "$digest" ] || [ "$digest" = "null" ]; then
+            echo "Unable to resolve digest for $image" >&2
+            echo "$manifest" >&2
+            exit 1
+          fi
+
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
       - name: "Generate SBOM"
